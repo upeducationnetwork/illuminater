@@ -1,0 +1,15 @@
+Package: illuminater
+Title: Connect to Illuminate via ODBC and pull saved queries
+Version: 0.0.0.9000
+Authors@R: person("Ryan", "Knight", email = "ryangknight@gmail.com", role = c("aut", "cre"))
+Description: Manage an ODBC connection to Illuminate to pull saved queries for
+    the benchmarks and also, at least temporariliy, for the grades dashboard.
+Depends:
+    R (>= 3.3.1)
+Imports:
+    DBI,
+    RPostgres
+License: Some kind of SUPER PRIVATE DO NOT SHARE license
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 5.0.1.9000
