@@ -10,17 +10,9 @@
 #' There is relatively little behind-the-scenes joining,
 #' instead returning a list of tidy data that the user can combine.
 #'
-#' Available methods
-#' \itemize{
-#'  \item \code{il_assessment_metadata()}: Wrapper that returns assessments, fields and standards for a list of assessment ids.
-#'  \item \code{il_assessements()}: Assessment-level data (e.g., name, local id)
-#'  \item \code{il_fields()}: Fields-level data
-#'  \item \code{il_standards()}: Stanards used in any fields
-#' }
-#'
 #' @param connection The connection object from your \code{il_connect} call
 #' @param assessment_ids The Illuminate IDs of the assessments you want
-#' @return A list of data frame for each of assessments, fields and standards
+#' @return A list of data frames for each of assessments, fields, field response points and standards
 #' @name il_assessment_metadata
 #' @import DBI
 #' @import RPostgres
@@ -39,10 +31,10 @@ il_assessment_metadata <- function(connection, assessment_ids){
   # Get assessment, field and standard metadata
 
   # Assessments
-  assessments <- il_assessements(connection, assessment_ids)
+  assessments <- il_assessement_info(connection, assessment_ids)
 
   # Fields
-  fields <- il_fields(connection, assessment_ids)
+  fields <- il_assessment_fields(connection, assessment_ids)
 
   # Standards
   standard_ids <- as.list(fields[!duplicated(fields$standard_id), "standard_id"])
@@ -55,9 +47,7 @@ il_assessment_metadata <- function(connection, assessment_ids){
 }
 
 
-#' @export
-#' @rdname il_assessment_metadata
-il_assessements <- function(connection, assessment_ids){
+il_assessement_info <- function(connection, assessment_ids){
   # Assessment metadata from assessments table
   query <- "
     SELECT
@@ -81,9 +71,8 @@ il_assessements <- function(connection, assessment_ids){
   DBI::dbGetQuery(connection, build_query(query, assessment_ids))
 }
 
-#' @export
-#' @rdname il_assessment_metadata
-il_fields <- function(connection, assessment_ids){
+
+il_assessment_fields <- function(connection, assessment_ids){
   # Data from Fields table
 
   # Note that standards may not be 1:1 with fields, which could return unexpected results
@@ -114,11 +103,31 @@ il_fields <- function(connection, assessment_ids){
   DBI::dbGetQuery(connection, build_query(query, assessment_ids))
 }
 
-#' @export
-#' @rdname il_assessment_metadata
+
+il_assessment_field_responses <- function(connection, assessment_ids){
+  # Get all scored student responses for an assessment. Responses worth zero points are not counted.
+
+  query <- "
+  SELECT
+    fr.field_id,
+    fr.field_response_id,
+    fr.response_id,
+    fr.version_id,
+    fr.points,
+    fr.choice,
+    fr.rationale
+    FROM dna_assessments.field_responses As fr
+    LEFT JOIN dna_assessments.fields As f ON f.field_id = fr.field_id
+    WHERE f.assessment_id IN (%s)
+  "
+  message("Getting Field Responses")
+  DBI::dbGetQuery(connection, build_query(query, assessment_ids))
+}
+
+
 il_standards <- function(connection, standard_ids){
 
-  # TODO: What is category ID? What is subject ID? Make this an export function?
+  # TODO: What is category ID? What is subject ID? Make this an export function? (Probably!)
   query <- "
   SELECT
     standards.standard_id,
