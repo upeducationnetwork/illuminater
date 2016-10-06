@@ -1,12 +1,12 @@
 # illuminater
 
-Wrapper for the Illuminate ODBC connection.
+Wrapper for the Illuminate ODBC connection. 
 
-Credentials are taken from environment variables.
+Assumes that you have a valid ODBC connection to Illuminate's data warehouse.
 
-Environment variables are usually accessed by saving a .Renviron file in the same folder as the RStudio project
+Credentials are taken from environment variables. Environment variables are usually accessed by saving a .Renviron file in the same folder as the project.
 
-To learn the schema, use Illuminate's Schema Spy: 
+To contribute, learn the schema using Illuminate's Schema Spy: 
 
 URL : https://spy.illuminateed.com/
 Username: schema
