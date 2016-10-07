@@ -9,7 +9,7 @@ il_assessment_metadata(connection, assessment_ids)
 \arguments{
 \item{connection}{The connection object from your \code{il_connect} call}
 
-\item{assessment_ids}{The Illuminate IDs of the assessments you want}
+\item{assessment_ids}{List of Illuminate IDs of the assessments you want}
 }
 \value{
 A list of data frames for each of assessments, fields, field response points and standards

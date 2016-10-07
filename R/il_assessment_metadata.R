@@ -11,7 +11,7 @@
 #' instead returning a list of tidy data that the user can combine.
 #'
 #' @param connection The connection object from your \code{il_connect} call
-#' @param assessment_ids The Illuminate IDs of the assessments you want
+#' @param assessment_ids List of Illuminate IDs of the assessments you want
 #' @return A list of data frames for each of assessments, fields, field response points and standards
 #' @name il_assessment_metadata
 #' @import DBI
@@ -36,12 +36,18 @@ il_assessment_metadata <- function(connection, assessment_ids){
   # Fields
   fields <- il_assessment_fields(connection, assessment_ids)
 
+  # Field Responses
+  field_responses <- il_assessment_field_responses(connection, assessment_ids)
+
   # Standards
   standard_ids <- as.list(fields[!duplicated(fields$standard_id), "standard_id"])
 
   standards <- il_standards(connection, standard_ids)
 
-  result <- list(assessments = assessments, fields = fields, standards = standards)
+  result <- list(assessments = assessments,
+                 fields = fields,
+                 field_responses=field_responses,
+                 standards = standards)
 
   result
 }
