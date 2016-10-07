@@ -4,10 +4,12 @@ Version: 0.0.2
 Authors@R: person("Ryan", "Knight", email = "ryangknight@gmail.com", role = c("aut", "cre"))
 Description: Manage an ODBC connection to Illuminate to pull saved queries. 
 Depends:
-    R (>= 3.3.1),
-    RPostgres
+    R (>= 3.3.1)
 Imports:
-    DBI
+    DBI,
+    RPostgres
+Suggests:
+    testthat
 License: MIT
 Encoding: UTF-8
 LazyData: true

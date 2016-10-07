@@ -9,6 +9,6 @@ Credentials are taken from environment variables. Environment variables are usua
 To contribute, learn the schema using Illuminate's Schema Spy: 
 
 URL : https://spy.illuminateed.com/
-Username: schema
+Username: [hidden]
 Password: [hidden]
 
