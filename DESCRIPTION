@@ -1,6 +1,6 @@
 Package: illuminater
 Title: Connect to Illuminate via ODBC and pull saved queries
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: person("Ryan", "Knight", email = "ryangknight@gmail.com", role = c("aut", "cre"))
 Description: Manage an ODBC connection to Illuminate to pull saved queries. 
 Depends:
