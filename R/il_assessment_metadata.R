@@ -123,9 +123,11 @@ il_assessment_field_responses <- function(connection, assessment_ids){
     fr.version_id,
     fr.points,
     fr.choice,
-    fr.rationale
+    fr.rationale,
+    r.response
     FROM dna_assessments.field_responses As fr
     LEFT JOIN dna_assessments.fields As f ON f.field_id = fr.field_id
+    LEFT JOIN dna_assessments.responses As r on r.response_id = fr.response_id
     WHERE f.assessment_id IN (%s)
   "
   message("Getting Field Responses")
