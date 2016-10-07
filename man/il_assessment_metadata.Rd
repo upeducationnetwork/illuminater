@@ -12,7 +12,7 @@ il_assessment_metadata(connection, assessment_ids)
 \item{assessment_ids}{List of Illuminate IDs of the assessments you want}
 }
 \value{
-A list of data frames for each of assessments, fields, field response points and standards
+A list of data frames for each of assessments, fields, field_responses, field_standards and field_groups
 }
 \description{
 Get metadata for an assessment out of Illuminate.

@@ -12,7 +12,7 @@
 #'
 #' @param connection The connection object from your \code{il_connect} call
 #' @param assessment_ids List of Illuminate IDs of the assessments you want
-#' @return A list of data frames for each of assessments, fields, field response points and standards
+#' @return A list of data frames for each of assessments, fields, field_responses, field_standards and field_groups
 #' @name il_assessment_metadata
 #' @import DBI
 #' @import RPostgres
@@ -42,10 +42,14 @@ il_assessment_metadata <- function(connection, assessment_ids){
   # Standards
   field_standards <- il_assessment_field_standards(connection, assessment_ids)
 
+  # Reporting Groups
+  field_groups <- il_assessment_field_groups(connection, assessment_ids)
+
   result <- list(assessments = assessments,
                  fields = fields,
                  field_responses=field_responses,
-                 field_standards = field_standards)
+                 field_standards = field_standards,
+                 field_groups = field_groups)
 
   result
 }
@@ -128,7 +132,7 @@ il_assessment_field_responses <- function(connection, assessment_ids){
 
 il_assessment_field_standards <- function(connection, assessment_ids){
 
-  # TODO: What is category ID? What is subject ID? Make this an export function? (Probably!)
+  # TODO: What is category ID? What is subject ID?
   query <- "
   SELECT
     f.assessment_id,
@@ -155,8 +159,21 @@ il_assessment_field_standards <- function(connection, assessment_ids){
 }
 
 
-build_query <- function(query, filter_ids){
-  # Approach is to build SQL queries then substitute assessment ids for each table
-  sprintf(query, paste(filter_ids, collapse = ","))
+il_assessment_field_groups <- function(connection, assessment_ids){
+
+  # TODO: What is category ID? What is subject ID?
+  query <- "
+  SELECT
+    frg.field_id,
+    frg.reporting_group_id,
+    rg.label
+  FROM dna_assessments.fields_reporting_groups as frg
+  LEFT JOIN dna_assessments.reporting_groups As rg ON rg.reporting_group_id = frg.reporting_group_id
+  JOIN dna_assessments.fields As f ON f.field_id = frg.field_id
+  WHERE f.assessment_id IN (%s)
+  "
+  message("Getting Reporting Group Data")
+  DBI::dbGetQuery(connection, build_query(query, assessment_ids))
 }
-# Add a scanned flag!
+
+
