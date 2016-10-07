@@ -42,7 +42,7 @@ il_assessment_metadata <- function(connection, assessment_ids){
   # Standards
   standard_ids <- as.list(fields[!duplicated(fields$standard_id), "standard_id"])
 
-  standard_ids <- !is.na(standard_ids)
+  standard_ids <- standard_ids[!is.na(standard_ids)]
 
   standards <- il_standards(connection, standard_ids)
 
