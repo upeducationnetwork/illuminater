@@ -40,16 +40,12 @@ il_assessment_metadata <- function(connection, assessment_ids){
   field_responses <- il_assessment_field_responses(connection, assessment_ids)
 
   # Standards
-  standard_ids <- as.list(fields[!duplicated(fields$standard_id), "standard_id"])
-
-  standard_ids <- standard_ids[!is.na(standard_ids)]
-
-  standards <- il_standards(connection, standard_ids)
+  field_standards <- il_assessment_field_standards(connection, assessment_ids)
 
   result <- list(assessments = assessments,
                  fields = fields,
                  field_responses=field_responses,
-                 standards = standards)
+                 field_standards = field_standards)
 
   result
 }
@@ -83,8 +79,6 @@ il_assessement_info <- function(connection, assessment_ids){
 il_assessment_fields <- function(connection, assessment_ids){
   # Data from Fields table
 
-  # Note that standards may not be 1:1 with fields, which could return unexpected results
-  # TODO: Verify uniqueness somewhere.
   query <- "
     SELECT
       fields.field_id,
@@ -96,15 +90,12 @@ il_assessment_fields <- function(connection, assessment_ids){
       fields.updated_at,
       fields.deleted_at,
       fields.body,
-      fields.sort_order,
       fields.is_rubric,
       fields.sheet_label,
       fields.extra_credit,
       fields.item_rev_id,
-      fields.is_advanced,
-      field_standards.standard_id
+      fields.is_advanced
     FROM dna_assessments.fields
-    LEFT JOIN dna_assessments.field_standards ON field_standards.field_id = fields.field_id
     WHERE fields.assessment_id IN (%s)
     "
   message("Getting Field Metadata")
@@ -135,12 +126,14 @@ il_assessment_field_responses <- function(connection, assessment_ids){
 }
 
 
-il_standards <- function(connection, standard_ids){
+il_assessment_field_standards <- function(connection, assessment_ids){
 
   # TODO: What is category ID? What is subject ID? Make this an export function? (Probably!)
   query <- "
   SELECT
-    standards.standard_id,
+    f.assessment_id,
+    f.field_id,
+    fs.standard_id,
     standards.parent_standard_id,
     standards.category_id,
     standards.subject_id,
@@ -151,12 +144,14 @@ il_standards <- function(connection, standard_ids){
     standards.stem,
     standards.description,
     standards.custom_code
-  FROM standards.standards
-  WHERE standards.standard_id IN (%s)
+  FROM dna_assessments.fields as f
+  LEFT JOIN dna_assessments.field_standards As fs ON fs.field_id = f.field_id
+  LEFT JOIN standards.standards ON standards.standard_id = fs.standard_id
+  WHERE f.assessment_id IN (%s)
   "
 
   message("Getting Standards Data")
-  DBI::dbGetQuery(connection, build_query(query, standard_ids))
+  DBI::dbGetQuery(connection, build_query(query, assessment_ids))
 }
 
 
