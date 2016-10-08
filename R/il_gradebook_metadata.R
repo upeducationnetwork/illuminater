@@ -15,17 +15,15 @@
 #' @export
 #' @examples
 #' c <- il_connect()
-#' gradebook_ids <- list(250, 399, 192) ## JK question - will leaving this blank return all?
-#' gb <- il_gradebook_details(c, gradebook_ids)
-#' str(gb$overall)
-#' str(gb$categories)
-#' str(gb$standards)
+#' gradebook_ids <- list(250, 399, 192) JK question - will leaving this blank return all?
+#' gb <- il_gradebook_metadata(c, gradebook_ids)
+#' str(gb$overall_grades)
+#' str(gb$category_grades)
+#' str(gb$standards_grades)
 #' str(gb$assignments)
 #' dbDisconnect(c)
-#'
-#' il_assessment_metadata <- function(connection, assessment_ids){
-# TODO: Write a trycatch for the DBI call to make error catching easier.
-# Get assessment, field and standard metadata
+
+il_gradebook_metadata <- function(connection, gradebook_ids){
 
 # Gradebook Info
 gradebooks <- il_gradebook_info(connection, gradebook_ids)
@@ -40,7 +38,7 @@ category_grades <- il_gradebook_category(connection, gradebook_ids)
 standards_grades <- il_gradebook_standards(connection, gradebook_ids)
 
 # Assignments
-assignments <- il_gradebook_assignments(connection, assessment_ids)
+assignments <- il_gradebook_assignments(connection, gradebook_ids)
 
 result <- list(gradebooks = gradebooks,
                overall_grades = overall_grades,
@@ -88,6 +86,7 @@ il_gradebook_overall <- function(connection, gradebook_ids){
     timeframe_end_date,
     calculated_at
   FROM gradebook.overall_score_cache
+  LEFT JOIN gradebook.gradebooks ON gradebook_id = gradebook_id
   WHERE gradebook_id IN (%s)"
 
   message("Getting Overall Grade Data")
@@ -117,6 +116,7 @@ il_gradebook_category <- function(connection, gradebook_ids){
     timeframe_start_date,
     timeframe_end_date,
   FROM gradebook.category_score_cache
+  LEFT JOIN gradebook.gradebooks ON gradebook_id = gradebook_id
   WHERE gradebook_id IN (%s)"
 
   message("Getting Category Grade Data")
@@ -125,7 +125,8 @@ il_gradebook_category <- function(connection, gradebook_ids){
 
 
 il_gradebook_standards <- function(connection, gradebook_ids){
-  # Standards grades from standards_score_cache table
+  # Standards grades from standards_score_cache table.
+  # TO DO: Join with standards table
   query <- "
   SELECT
     cache_id,
@@ -144,11 +145,40 @@ il_gradebook_standards <- function(connection, gradebook_ids){
     timeframe_end_date,
     calculated_at
   FROM gradebook.standards_cache
+  LEFT JOIN gradebook.gradebooks ON gradebook_id = gradebook_id
   WHERE gradebook_id IN (%s)"
 
   message("Getting Standards Grade Data")
   DBI::dbGetQuery(connection, build_query(query, gradebook_ids))
 }
 
+il_gradebook_assignments <- function(connection, gradebook_ids){
+  # Assignment information from gradebook.assignments table.
+  # TO DO: Join w categories table
+  query <- "
+  SELECT
+    assignment_id,
+    short_name,
+    long_name,
+    assign_date,
+    due_date,
+    possible_points,
+    category_id,
+    is_active,
+    description,
+    _grading_period_id,
+    auto_score_type,
+    auto_score_id,
+    possible_score,
+    gradebook_id,
+    last_modified_by,
+    is_extra_credit,
+    tags
+  FROM gradebook.standards_cache
+  LEFT JOIN gradebook.gradebooks ON gradebook_id = gradebook_id
+  WHERE gradebook_id IN (%s)"
 
+  message("Getting Assignment Information")
+  DBI::dbGetQuery(connection, build_query(query, gradebook_ids))
+}
 
