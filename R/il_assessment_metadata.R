@@ -75,7 +75,7 @@ il_assessement_info <- function(connection, assessment_ids){
     FROM dna_assessments.assessments
     WHERE assessment_id IN (%s)"
 
-  message("Getting Assessment Metadata")
+  message("Getting Assessment Info")
   DBI::dbGetQuery(connection, build_query(query, assessment_ids))
 }
 

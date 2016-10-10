@@ -10,17 +10,9 @@
 #' There is relatively little behind-the-scenes joining,
 #' instead returning a list of tidy data that the user can combine.
 #'
-#' Available methods
-#' \itemize{
-#'  \item \code{il_assessment_metadata()}: Wrapper that returns assessments, fields and standards for a list of assessment ids.
-#'  \item \code{il_assessements()}: Assessment-level data (e.g., name, local id)
-#'  \item \code{il_fields()}: Fields-level data
-#'  \item \code{il_standards()}: Stanards used in any fields
-#' }
-#'
 #' @param connection The connection object from your \code{il_connect} call
 #' @param assessment_ids The Illuminate IDs of the assessments you want
-#' @return A list of data frames for each of assessments, fields and standards
+#' @return A list of data frames for each of students, student-responses and student scanning data (empty for now)
 #' @name il_assessment_responses
 #' @import DBI
 #' @import RPostgres
@@ -84,7 +76,8 @@ il_assessment_student_responses <- function(connection, assessment_ids){
     sar.field_id,
     sar.response_id,
     sar.version_id,
-    r.response
+    r.response,
+    fr.points
     FROM dna_assessments.students_assessments_responses As sar
     LEFT JOIN dna_assessments.responses As r ON r.response_id = sar.response_id
     WHERE sar.assessment_id IN (%s)
