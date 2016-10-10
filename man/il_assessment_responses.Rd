@@ -12,7 +12,7 @@ il_assessment_responses(connection, assessment_ids)
 \item{assessment_ids}{The Illuminate IDs of the assessments you want}
 }
 \value{
-A list of data frames for each of assessments, fields and standards
+A list of data frames for each of students, student-responses and student scanning data (empty for now)
 }
 \description{
 Get individual responses for an assessment out of Illuminate.
@@ -25,14 +25,6 @@ The intended workflow is
 
 There is relatively little behind-the-scenes joining,
 instead returning a list of tidy data that the user can combine.
-
-Available methods
-\itemize{
- \item \code{il_assessment_metadata()}: Wrapper that returns assessments, fields and standards for a list of assessment ids.
- \item \code{il_assessements()}: Assessment-level data (e.g., name, local id)
- \item \code{il_fields()}: Fields-level data
- \item \code{il_standards()}: Stanards used in any fields
-}
 }
 \examples{
 c <- il_connect()
