@@ -12,7 +12,7 @@
 #'
 #' @param connection The connection object from your \code{il_connect} call
 #' @param assessment_ids The Illuminate IDs of the assessments you want
-#' @return A list of data frames for each of students, student-responses and student scanning data (empty for now)
+#' @return A list of data frames for each of student_assessments, student_responses and scanning_info (empty for now)
 #' @name il_assessment_responses
 #' @import DBI
 #' @import RPostgres
@@ -28,11 +28,11 @@
 #'
 il_assessment_responses <- function(connection, assessment_ids){
   # Get all students who took an assessment, their responses and scan data
-  students <- il_assessment_students(connection, assessment_ids)
+  student_assessments <- il_assessment_students(connection, assessment_ids)
   student_responses <- il_assessment_student_responses(connection, assessment_ids)
   scanning_info <- il_assessment_scans(connection, assessment_ids)
 
-  result <- list(students=students, student_responses=student_responses, scanning_info=scanning_info)
+  result <- list(student_assessments=student_assessments, student_responses=student_responses, scanning_info=scanning_info)
 
   result
 }

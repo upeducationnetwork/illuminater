@@ -12,7 +12,7 @@ il_assessment_responses(connection, assessment_ids)
 \item{assessment_ids}{The Illuminate IDs of the assessments you want}
 }
 \value{
-A list of data frames for each of students, student-responses and student scanning data (empty for now)
+A list of data frames for each of student_assessments, student_responses and scanning_info (empty for now)
 }
 \description{
 Get individual responses for an assessment out of Illuminate.
