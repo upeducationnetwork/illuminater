@@ -80,7 +80,7 @@ il_assessment_student_responses <- function(connection, assessment_ids){
     fr.points
     FROM dna_assessments.students_assessments_responses As sar
     LEFT JOIN dna_assessments.responses As r ON r.response_id = sar.response_id
-    JOIN dna_assessments.field_responses As fr ON
+    LEFT JOIN dna_assessments.field_responses As fr ON
       fr.response_id = sar.response_id AND
       fr.version_id = sar.version_id AND
       fr.field_id = sar.field_id
