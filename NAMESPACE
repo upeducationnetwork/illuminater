@@ -3,5 +3,6 @@
 export(il_assessment_metadata)
 export(il_assessment_responses)
 export(il_connect)
+export(il_gradebook_metadata)
 import(DBI)
 import(RPostgres)
