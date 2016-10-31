@@ -23,7 +23,7 @@ Get information about
 }
 \examples{
 c <- il_connect()
-gradebook_ids <- list(250, 399, 192) JK question - will leaving this blank return all?
+gradebook_ids <- list(250, 399, 192)
 gb <- il_gradebook_metadata(c, gradebook_ids)
 str(gb$overall_grades)
 str(gb$category_grades)

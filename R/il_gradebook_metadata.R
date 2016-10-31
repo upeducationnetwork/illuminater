@@ -15,7 +15,7 @@
 #' @export
 #' @examples
 #' c <- il_connect()
-#' gradebook_ids <- list(250, 399, 192) JK question - will leaving this blank return all?
+#' gradebook_ids <- list(250, 399, 192)
 #' gb <- il_gradebook_metadata(c, gradebook_ids)
 #' str(gb$overall_grades)
 #' str(gb$category_grades)
@@ -73,7 +73,7 @@ il_gradebook_overall <- function(connection, gradebook_ids){
   SELECT
     cache_id,
     student_id,
-    gradebook_id,
+    o.gradebook_id,
     possible_points,
     points_earned,
     percentage,
@@ -86,7 +86,7 @@ il_gradebook_overall <- function(connection, gradebook_ids){
     timeframe_end_date,
     calculated_at
   FROM gradebook.overall_score_cache
-  LEFT JOIN gradebook.gradebooks ON gradebook_id = gradebook_id
+  LEFT JOIN gradebook.gradebooks ON gradebook_id = o.gradebook_id
   WHERE gradebook_id IN (%s)"
 
   message("Getting Overall Grade Data")
