@@ -4,7 +4,7 @@
 \alias{il_gradebook_metadata}
 \title{Illuminate Gradebook Metadata}
 \usage{
-il_gradebook_metadata(connection, gradebook_ids)
+il_gradebook_metadata(connection)
 }
 \arguments{
 \item{connection}{The connection object from your \code{il_connect} call}
@@ -23,8 +23,7 @@ Get information about
 }
 \examples{
 c <- il_connect()
-gradebook_ids <- list(250, 399, 192)
-gb <- il_gradebook_metadata(c, gradebook_ids)
+gb <- il_gradebook_metadata(c)
 str(gb$overall_grades)
 str(gb$category_grades)
 str(gb$standards_grades)
