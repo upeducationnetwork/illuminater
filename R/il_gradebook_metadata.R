@@ -24,36 +24,36 @@
 
 il_gradebook_metadata <- function(connection){
 
-# Gradebook Info
-gradebooks <- il_gradebook_info(connection)
+  # Gradebook Info
+  gradebooks <- il_gradebook_info(connection)
 
-# Gradebook Grading Period Weights Info
-gpweights <- il_gpweights_info(connection)
+  # Gradebook Grading Period Weights Info
+  gpweights <- il_gpweights_info(connection)
 
-# Gradebook Grading Period Names
-gpname <- il_gpname_info(connection)
+  # Gradebook Grading Period Names
+  gpname <- il_gpname_info(connection)
 
-# Overall Grades
-overall_grades <- il_gradebook_overall(connection)
+  # Overall Grades
+  overall_grades <- il_gradebook_overall(connection)
 
-# Category Grades
-category_grades <- il_gradebook_category(connection)
+  # Category Grades
+  category_grades <- il_gradebook_category(connection)
 
-# Standards Grades
-standards_grades <- il_gradebook_standards(connection)
+  # Standards Grades
+  standards_grades <- il_gradebook_standards(connection)
 
-# Assignments
-assignments <- il_gradebook_assignments(connection)
+  # Assignments
+  assignments <- il_gradebook_assignments(connection)
 
-result <- list(gradebooks = gradebooks,
-               gpweights = gpweights,
-               gpname = gpname,
-               overall_grades = overall_grades,
-               category_grades = category_grades,
-               standards_grades = standards_grades,
-               assignments = assignments)
+  result <- list(gradebooks = gradebooks,
+                 gpweights = gpweights,
+                 gpname = gpname,
+                 overall_grades = overall_grades,
+                 category_grades = category_grades,
+                 standards_grades = standards_grades,
+                 assignments = assignments)
 
-result
+  result
 }
 
 il_gradebook_info <- function(connection){
