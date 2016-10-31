@@ -50,8 +50,6 @@ il_gradebooks <- function(connection){
   DBI::dbGetQuery(connection, query)
 }
 
-
-
 il_gradebooks_gradingperiods <- function(connection){
   # Grading period to gradebook map
   query <- "

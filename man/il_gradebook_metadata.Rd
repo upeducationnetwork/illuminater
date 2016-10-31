@@ -8,26 +8,19 @@ il_gradebook_metadata(connection)
 }
 \arguments{
 \item{connection}{The connection object from your \code{il_connect} call}
-
-\item{gradebook_id}{List of Illuminate IDs for each gradebook created this year}
 }
 \value{
-A list of data frames for gradebooks, overall gradebook scores, standards and category grades, and individual assignment details
+A list of data frames for gradebooks, gradingperiods, and gradebooks_gradingperiods
 }
 \description{
-Get information about
-1. Gradebooks
-2. Overall scores
-3. Category and Standard scores,
-4. Assignments
+Get metadata information about gradebooks, grading periods and the map between gradebooks and grading periods.
 }
 \examples{
 c <- il_connect()
 gb <- il_gradebook_metadata(c)
-str(gb$overall_grades)
-str(gb$category_grades)
-str(gb$standards_grades)
-str(gb$assignments)
+str(gb$gradebooks)
+str(gb$gradebooks_gradingperiods)
+str(gb$gradingperiods))
 dbDisconnect(c)
 }
 
